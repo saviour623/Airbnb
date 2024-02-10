@@ -64,7 +64,7 @@ class CmdParser:
         parse_cmd = line.pop(0)
         if parse_cmd not in self.set_commands:
             parse_cmd = 'run_' + parse_cmd
-            if parse_cmd not in method_list:
+        if parse_cmd not in method_list:
                 return False
         __attrcmd = self.__getattr__(self, parse_cmd)
 
@@ -145,6 +145,7 @@ class MyConsole(Cmd):
 
 if __name__ == "__main__":
     parser = MyConsole()
+    #parser.set_commands.append('login')
     parser.prompt = '(airbnb) '
     #   parser.update_keys(ignore=[';', '&'], s=['create', '1'], p='hi')
     parser.init_loop()
