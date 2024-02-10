@@ -73,7 +73,7 @@ class CmdParser:
         __attrcmd(line)
         return True
 
-class inParser(CmdParser):
+class Cmd(CmdParser):
     def __init__(self):
         self.prompt = '(cmd) '
         self.key_value = None
@@ -107,7 +107,7 @@ class inParser(CmdParser):
                 try:
                     line = readFrmStdin()
                 except KeyboardInterrupt:
-                    print('interrupted - closed')
+                    print('\ninterrupted - closed')
                     exit()
                 else:
                     self.parse_line(line)
@@ -116,9 +116,35 @@ class inParser(CmdParser):
     def run_create(self, *arg):
         print('running')
 
+class MyConsole(Cmd):
+    def __init__(self):
+        self.user_name = ''
+        super().__init__()
+
+    def User(self):
+        pass
+    def run_create(self, acct_type):
+        super().run_create()
+
+    def run_login(self, *args):
+        username = password = None
+        if args != ([],):
+            # help message
+            print('login takes no argument')
+            return
+        try:
+            username = str(input('> username: '))
+            password = str(input('> password: '))
+        except KeyboardInterrupt:
+            print()
+
+        #TODO: if user account exist then login
+        if True and username != None:
+            self.prompt = f'({username}@airbnb) '
+        pass
+
 if __name__ == "__main__":
-    parser = inParser()
+    parser = MyConsole()
     parser.prompt = '(airbnb) '
-    term_handler()
- #   parser.update_keys(ignore=[';', '&'], s=['create', '1'], p='hi')
-  #  parser.init_loop()
+    #   parser.update_keys(ignore=[';', '&'], s=['create', '1'], p='hi')
+    parser.init_loop()

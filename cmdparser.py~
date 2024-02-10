@@ -1,6 +1,18 @@
 #!/bin/env python3
-import os, sys, readline
+import os, sys, readline, platform
 import re
+
+termio_handler_support = False
+
+if platform.system() == 'Linux':
+    import termios
+    termio_handler_support = True
+
+def term_handler(key=None):
+    if termio_handler_support is True:
+        terminfo = save_term = termios.tcgetattr(sys.stdin)
+        print(terminfo)
+
 
 class CmdParser:
     def __init__(self):
@@ -44,7 +56,7 @@ class CmdParser:
 
     def ignore_args(self, args):
         return [arg for arg in args if not arg in self.ignore]
-    
+
     def run(self, line):
         if line == self.null_line:
             return None
@@ -54,7 +66,7 @@ class CmdParser:
             parse_cmd = 'run_' + parse_cmd
             if parse_cmd not in method_list:
                 return False
-        __attrcmd = self.__getattr__(self, parse_cmd) 
+        __attrcmd = self.__getattr__(self, parse_cmd)
 
         if not hasattr(__attrcmd, '__call__'):
             return False
@@ -107,5 +119,6 @@ class inParser(CmdParser):
 if __name__ == "__main__":
     parser = inParser()
     parser.prompt = '(airbnb) '
-    parser.update_keys(ignore=[';', '&'], s=['create', '1'], p='hi')
-    parser.init_loop()
+    term_handler()
+ #   parser.update_keys(ignore=[';', '&'], s=['create', '1'], p='hi')
+  #  parser.init_loop()
